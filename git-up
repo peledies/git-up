@@ -100,18 +100,28 @@ inc_patch() {
 
 push_it() {
   echo_start
-  echo -n "${gold}Pushing to ${1}${default}"
-  git push $1 > /dev/null 2>&1
-  test_for_success $?
-
-  echo_start
-  echo -n "${gold}Pushing Tags to ${1}${default}"
-  git push $1 --tags > /dev/null 2>&1
+  echo -n "${gold}Pushing Tags and HEAD to ${1}${default}"
+  git push $1 HEAD --tags > /dev/null 2>&1
   test_for_success $1
 }
 
 create_tag() {
   git tag -a $1 -m $2
+}
+
+test_it() {
+  echo "${default}"
+  composer run test
+}
+
+increment_tag() {
+  echo "${cyan}Enter Tag Message:${default}"
+  read message
+
+  newtag=${version[0]}.${version[1]}.${version[2]}
+  create_tag ${newtag} ${message}
+
+  echo "${default}Tag ${gold}${newtag}${default} created"
 }
 
 while getopts ":t:" o; do
@@ -146,13 +156,17 @@ case "$segment" in
 
 esac
 
-echo "${cyan}Enter Tag Message:${default}"
-read message
+read -p "${cyan}Do you want to run composer tests first: [y/n]" answer
+  case "${answer}" in
+      [yY])
+          test_it
+  esac
 
-newtag=${version[0]}.${version[1]}.${version[2]}
-create_tag ${newtag} ${message}
-
-echo "${default}Tag ${gold}${newtag}${default} created"
+read -p "${cyan}Do you want to increment the tag version: [y/n]" answer
+  case "${answer}" in
+      [yY])
+          increment_tag
+  esac
 
 read -p "${cyan}Do you want to push to origin: [y/n]" answer
   case "${answer}" in
@@ -164,4 +178,10 @@ read -p "${cyan}Do you want to push to staging: [y/n]" answer
   case "${answer}" in
       [yY])
           push_it 'staging'
+  esac
+
+read -p "${cyan}Do you want to push to production: [y/n]" answer
+  case "${answer}" in
+      [yY])
+          push_it 'production'
   esac
