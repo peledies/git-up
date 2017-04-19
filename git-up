@@ -168,20 +168,10 @@ read -p "${cyan}Do you want to increment the tag version: [y/n]" answer
           increment_tag
   esac
 
-read -p "${cyan}Do you want to push to origin: [y/n]" answer
-  case "${answer}" in
-      [yY])
-          push_it 'origin'
-  esac
-
-read -p "${cyan}Do you want to push to staging: [y/n]" answer
-  case "${answer}" in
-      [yY])
-          push_it 'staging'
-  esac
-
-read -p "${cyan}Do you want to push to production: [y/n]" answer
-  case "${answer}" in
-      [yY])
-          push_it 'production'
-  esac
+for i in $( git remote ); do
+  read -p "${cyan}Do you want to push to $i: [y/n]" answer
+    case "${answer}" in
+        [yY])
+            push_it $i
+    esac
+done
