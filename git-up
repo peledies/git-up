@@ -169,7 +169,7 @@ read -p "${cyan}Do you want to increment the tag version: [y/n]" answer
   esac
 
 for i in $( git remote ); do
-  read -p "${cyan}Do you want to push to $i: [y/n]" answer
+  read -p "${cyan}Do you want to push to ${red}$i${cyan}: [y/n]" answer
     case "${answer}" in
         [yY])
             push_it $i
