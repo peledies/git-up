@@ -156,11 +156,13 @@ case "$segment" in
 
 esac
 
-read -p "${cyan}Do you want to run composer tests first: [y/n]" answer
-  case "${answer}" in
-      [yY])
-          test_it
-  esac
+if [ -d "tests"]; then
+  read -p "${cyan}Do you want to run composer tests first: [y/n]" answer
+    case "${answer}" in
+        [yY])
+            test_it
+    esac
+fi
 
 read -p "${cyan}Do you want to increment the tag version: [y/n]" answer
   case "${answer}" in
