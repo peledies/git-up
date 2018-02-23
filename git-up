@@ -81,7 +81,6 @@ version=( ${array[0]//./ } )
 if [ ${#version[@]} -eq 0 ]; then
     version=(0 0 0)
 fi
-printf '%s\n' "${version[@]}"
 
 usage() { echo "Usage: $0 [ -t major|minor|patch ]" 1>&2; exit 1; }
 
